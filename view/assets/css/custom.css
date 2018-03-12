@@ -1,0 +1,52 @@
+*{ margin: 0;padding: 0;outline: 0;}
+body {
+   background-image: url("‪C:\Users\Rishabh\Desktop\image.jpg");
+   background-color: #cccccc;
+}
+.formError {color: red;}
+.submit{
+    width: 5px;
+}
+.errorContainerWrap {
+        background: #f11163;
+    padding: 10px;
+    color: #fff;
+    margin: 10px 0px;
+    display: none;
+}
+.authenticationWrap {
+    background: #54a2e4;
+    border-radius: 3px;
+    box-shadow: 0px 0px 8px 3px #ccc;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.loginContentWrap {}
+.signupContentWrap {display: none;}
+
+.card {
+        background: #fafafa;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+.postList {
+        border: 1px solid #ccc;
+    margin: 10px 0px;
+    padding: 10px;
+    background: #fff;
+}
+
+.postCreatorDetails {margin-bottom: 12px;}
+.postCreatorDetails img {
+    float: left;
+}
+.postCreatorDetails h3 {
+        margin-top: 10px;
+    padding-left: 50px;
+    font-size: 18px;
+}
+.postCreatorDetails p {padding-left: 50px;}
+
+.postListContentArea {}

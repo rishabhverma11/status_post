@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/custom.css">
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-3 col-md-offset-4 authenticationWrap">
+            <div class="loginContentWrap">
+                <h3 class="text-center">Login</h3>
+                <div class="form-wrap">
+                    <form>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Enter Email" class="form-control emailLoginField" />
+                            <div class="formError"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" placeholder="Enter Password" class="form-control passwordLoginField" />
+                            <div class="formError"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-block btn-danger login"/>
+                        </div>
+                        <p>Signup ? <a href="javascript:void(0)" class="signupContentToggleWrap">Click here</a></p>
+                    </form>
+                </div>
+            </div>
+            <div class="signupContentWrap">
+                <h3 class="text-center">Signup</h3>
+                <div class="errorContainerWrap"></div>
+                <div class="form-wrap">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Enter Name" class="form-control nameSignupField" />
+                            <div class="formError"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Enter Email" class="form-control emailSignupField" />
+                            <div class="formError"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" placeholder="Enter Password" class="form-control passwordSignupField" />
+                            <div class="formError"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="confirm_password" placeholder="Enter Confirm Password" class="form-control confirmPasswordSignupField" />
+                            <div class="formError"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-block btn-danger createUser" value="create" />
+                        </div>
+                        <p>Login ? <a href="javascript:void(0)" class="loginContentToggleWrap">Click here</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================== -->
+    <!-- ======= Jquery Code ====== -->
+    <!-- ========================== -->
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var emailRegex = "([a-zA-Z0-9_.]+@[a-zA-Z0-9]+[.a-zA-Z]+)$";
+            // For signup click here button
+            $('.signupContentToggleWrap').click(function(){
+                $('.loginContentWrap').hide();
+                $('.signupContentWrap').show();
+            });
+            // For login click here button
+            $('.loginContentToggleWrap').click(function(){
+                $('.signupContentWrap').hide();
+                $('.loginContentWrap').show();
+            });
+            // For Login
+            $('.login').click(function(event){
+                event.preventDefault();
+                var email = $('.emailLoginField').val();
+                var password = $('.passwordLoginField').val();
+                $('.errorContainerWrap').empty();
+                $('.errorContainerWrap').hide();
+                $('.formError').empty();
+                if (email.length == 0) {
+                    $('.emailLoginField').parents('.form-group').find('.formError').html('This field is required');
+                    return false;
+                }
+                if(!email.match(emailRegex)) {
+                    $('.emailLoginField').parents('.form-group').find('.formError').html('Please enter valid email.');
+                    return false;
+                }
+                if (password.length == 0) {
+                    $('.passwordLoginField').parents('.form-group').find('.formError').html('This field is required');
+                    return false;
+                }
+                var request = $.ajax({
+                    "url": "http://localhost:3003/user/login",
+                    "type": "post",
+                    "data": {
+                        "email" : email,
+                        "password" : password
+                    }
+                });
+                request.success(function(data){
+                    var userData = data.response;
+                    console.log('hey');
+                    console.log(userData);
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    localStorage.setItem('access_token',  userData.access_token);
+                     window.location.replace('home.html');
+                    });
+                // request.success(function(data){
+                //     var userData = data.response;
+                //     console.log(userData);
+                //     console.log(userData.access_token);
+                //     localStorage.setItem('user', JSON.stringify(userData));
+                //     localStorage.setItem('access_token', userData.access_token);
+                //     //window.location.replace('home.html');
+                // });    
+                request.fail(function(error){
+                    var err = error.responseJSON.message;
+                    $('.errorContainerWrap').show();
+                    $('.errorContainerWrap').html(err);
+                });
+            });
+            // For user signup
+            $('.createUser').click(function(event){
+                event.preventDefault();
+                var name = $('.nameSignupField').val();
+                var email = $('.emailSignupField').val();
+                var password = $('.passwordSignupField').val();
+                var confirmPassword = $('.confirmPasswordSignupField').val();
+                $('.errorContainerWrap').empty();
+                $('.errorContainerWrap').hide();
+                $('.formError').empty();
+                if (name.length == 0) {
+                    $('.nameSignupField').parents('.form-group').find('.formError').html('This field is required');
+                    return false;
+                }
+                if (email.length == 0) {
+                    $('.emailSignupField').parents('.form-group').find('.formError').html('This field is required');
+                    return false;
+                }
+                if(!email.match(emailRegex)) {
+                    $('.emailSignupField').parents('.form-group').find('.formError').html('Please enter valid email.');
+                    return false;
+                }
+                if (password.length == 0) {
+                    $('.passwordSignupField').parents('.form-group').find('.formError').html('This field is required');
+                    return false;
+                }
+                if (confirmPassword.length == 0) {
+                    $('.confirmPasswordSignupField').parents('.form-group').find('.formError').html('This field is required');
+                    return false;
+                }
+                if (password != confirmPassword) {
+                    $('.confirmPasswordSignupField').parents('.form-group').find('.formError').html('Password should be matched');
+                    return false;
+                }
+                
+                var request = $.ajax({
+                    "url": "http://localhost:3003/user/signup",
+                    "type": "post",
+                    "data": {
+                        "name": name,
+                        "email" : email,
+                        "password" : password
+                    }
+                });
+                request.success(function(data){
+                    var userData = data.response;
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    localStorage.setItem('access_token', userData.access_token);
+                    window.location.replace('home.html');
+                });
+                request.fail(function(error){
+                    var err = error.responseJSON.message;
+                    // $('.errorContainerWrap').show();
+                    // $('.errorContainerWrap').html(err);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
