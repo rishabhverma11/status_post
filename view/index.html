@@ -109,6 +109,9 @@
                     console.log(userData);
                     localStorage.setItem('user', JSON.stringify(userData));
                     localStorage.setItem('access_token',  userData.access_token);
+                    localStorage.setItem('user_id',  userData.user_id);
+                    localStorage.setItem('name', userData.name);
+
                      window.location.replace('home.html');
                     });
                 // request.success(function(data){
